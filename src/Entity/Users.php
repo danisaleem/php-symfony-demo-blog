@@ -40,7 +40,7 @@ class Users
     private $about_me;
 
     /**
-     * @ORM\OneToMany(targetEntity=Answers::class, mappedBy="auther", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Answers::class, mappedBy="author", orphanRemoval=true)
      */
     private $answers;
 
@@ -131,7 +131,7 @@ class Users
     {
         if (!$this->answers->contains($answer)) {
             $this->answers[] = $answer;
-            $answer->setAuther($this);
+            $answer->setAuthor($this);
         }
 
         return $this;
@@ -142,8 +142,8 @@ class Users
         if ($this->answers->contains($answer)) {
             $this->answers->removeElement($answer);
             // set the owning side to null (unless already changed)
-            if ($answer->getAuther() === $this) {
-                $answer->setAuther(null);
+            if ($answer->getAuthor() === $this) {
+                $answer->setAuthor(null);
             }
         }
 

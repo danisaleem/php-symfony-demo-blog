@@ -45,6 +45,11 @@ class Questions
      */
     private $author;
 
+    /**
+     * @ORM\Column(type="integer", options={"default": 0})
+     */
+    private $votes;
+
     public function __construct()
     {
         $this->answers = new ArrayCollection();
@@ -140,6 +145,18 @@ class Questions
     public function setAuthor(?Users $author): self
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    public function getVotes(): ?int
+    {
+        return $this->votes;
+    }
+
+    public function setVotes(int $votes): self
+    {
+        $this->votes = $votes;
 
         return $this;
     }

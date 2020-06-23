@@ -28,7 +28,7 @@ class Answers
     private $answeredOn;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Questions::class, inversedBy="answers",fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity=Questions::class, inversedBy="answers")
      * @ORM\JoinColumn(nullable=false)
      */
     private $question;
@@ -38,6 +38,11 @@ class Answers
      * @ORM\JoinColumn(nullable=false)
      */
     private $author;
+
+    /**
+     * @ORM\Column(type="integer", options={"default": 0})
+     */
+    private $votes;
 
     public function getId(): ?int
     {
@@ -88,6 +93,18 @@ class Answers
     public function setAuthor(?Users $author): self
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    public function getVotes(): ?int
+    {
+        return $this->votes;
+    }
+
+    public function setVotes(int $votes): self
+    {
+        $this->votes = $votes;
 
         return $this;
     }
