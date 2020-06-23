@@ -49,9 +49,9 @@
                         <p>-- {{ answer.author.username }}</p>
                     </div>
                     <div class="vote-arrows flex-fill pt-2 js-vote-arrows" style="min-width: 90px;">
-                        <a class="vote-up" href="#" data-direction="up"><i class="far fa-arrow-alt-circle-up"></i></a>
-                        <a class="vote-down" href="#" data-direction="down"><i class="far fa-arrow-alt-circle-down"></i></a>
-                        <span>+ <span class="js-vote-total">6</span></span>
+                        <a class="vote-up" href="#" data-id="{{ answer.id }}" data-direction="up"><i class="far fa-arrow-alt-circle-up"></i></a>
+                        <a class="vote-down" href="#" data-id="{{ answer.id }}" data-direction="down"><i class="far fa-arrow-alt-circle-down"></i></a>
+                        <span class="js-vote-total{{ answer.id }}">{{ answer.votes }} votes</span>
                     </div>
                 </div>
             </li>
@@ -64,17 +64,18 @@
     {{ parent() }}
 
     <script>
-        //alert("Hello")
         var $container = $('.js-vote-arrows');
         $container.find('a').on('click', function(e) {
             e.preventDefault();
             var $link = $(e.currentTarget);
 
             $.ajax({
-                url: '/comments/10/vote/'+$link.data('direction'),
+                url: '/comments/' + $link.data('id')+ '/vote/' + $link.data('direction'),
                 method: 'POST'
             }).then(function(data) {
-                $container.find('.js-vote-total').text(data.votes);
+                // $container.find($link).text(data.votes);
+                var voteCounter='.js-vote-total'+ $link.data('id');  // uniquely identify vote of individual answwer
+                $container.find(voteCounter).text(data.votes);
             });
         });
     </script>

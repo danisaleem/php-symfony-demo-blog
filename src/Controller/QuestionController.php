@@ -89,7 +89,6 @@ class QuestionController extends AbstractController
             $em->flush($question);
             $em->flush($answer);
 
-
             return $this->redirectToRoute('app_question_show',['slug'=>$slug]);
         }
         
