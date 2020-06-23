@@ -19,13 +19,7 @@ class QuestionController extends AbstractController
      */
     public function homepage(Request $request)
     {
-//        $current_user=$this->getDoctrine()
-//            ->getRepository('App:Users')
-//            ->findOneBy(['id' => 1]);
-
         $this->get('session')->set("userId",1); # user management
-
-//        $userId=$this->get('session')->get('userId', []);
 
         if ($request->isMethod('post'))
         {
@@ -81,11 +75,8 @@ class QuestionController extends AbstractController
             $answer->setAnswerText($request->get('txtAnswer'));
             $answer->setQuestion($question);
 
-//            dd($question);
-
             $em=$this->getDoctrine()->getManager();
             $em->persist($answer);
-//            $em->merge($answer);
             $em->flush($question);
             $em->flush($answer);
 
@@ -95,7 +86,6 @@ class QuestionController extends AbstractController
         $answers=$this->getDoctrine()
             ->getRepository('App:Answers')
             ->findBy(['question' => $slug]);
-//        dd($answers);
 
         return $this->render('question/show.html.twig', [
             'question' => $question,
