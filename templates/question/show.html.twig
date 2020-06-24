@@ -52,6 +52,8 @@
                         <a class="vote-up" href="#" data-id="{{ answer.id }}" data-direction="up"><i class="far fa-arrow-alt-circle-up"></i></a>
                         <a class="vote-down" href="#" data-id="{{ answer.id }}" data-direction="down"><i class="far fa-arrow-alt-circle-down"></i></a>
                         <span class="js-vote-total{{ answer.id }}">{{ answer.votes }} votes</span>
+                        &ensp;
+                        <a href="#" data-id="{{ answer.id }}" class="fa fa-trash fa-xs js-delete" style="color:#ff0000">   </a>
                     </div>
                 </div>
             </li>
@@ -64,19 +66,35 @@
     {{ parent() }}
 
     <script>
+        var $deletelink = $('.js-delete');
+        $deletelink.on('click', function(e) {
+            e.preventDefault();
+            // var $link = $(e.currentTarget);
+
+            $.ajax({
+                url: '/answer/delete/'+ $deletelink.data('id'),
+                method: 'DELETE'
+            }).then(function(data) {
+                alert(data.result);
+                window.location.reload();
+            });
+        });
+
         var $container = $('.js-vote-arrows');
+
         $container.find('a').on('click', function(e) {
             e.preventDefault();
             var $link = $(e.currentTarget);
-
-            $.ajax({
-                url: '/comments/' + $link.data('id')+ '/vote/' + $link.data('direction'),
-                method: 'POST'
-            }).then(function(data) {
-                // $container.find($link).text(data.votes);
-                var voteCounter='.js-vote-total'+ $link.data('id');  // uniquely identify vote of individual answwer
-                $container.find(voteCounter).text(data.votes);
-            });
+            if($link.data('direction'))
+            {
+                $.ajax({
+                    url: '/answer/' + $link.data('id')+ '/vote/' + $link.data('direction'),
+                    method: 'POST'
+                }).then(function(data) {
+                    var voteCounter='.js-vote-total'+ $link.data('id');  // uniquely identify vote of individual answwer
+                    $container.find(voteCounter).text(data.votes);
+                });
+            }
         });
     </script>
  
