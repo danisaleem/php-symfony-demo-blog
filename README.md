@@ -8,9 +8,9 @@
 ```
 $ php bin/console make:migration         
 $ php bin/console doctrine:migrations:migrate  
-$php bin/console doctrine:fixtures:load  
+$ php bin/console doctrine:fixtures:load  
 $ symfony serve  
 ```
 Login details:  
-email: abc@gmail.com
+email: abc@gmail.com  
 password : abc
