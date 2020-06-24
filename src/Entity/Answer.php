@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=AnswersRepository::class)
  */
-class Answers
+class Answer
 {
     /**
      * @ORM\Id()
@@ -28,13 +28,13 @@ class Answers
     private $answeredOn;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Questions::class, inversedBy="answers")
+     * @ORM\ManyToOne(targetEntity=Question::class, inversedBy="answers")
      * @ORM\JoinColumn(nullable=false)
      */
     private $question;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Users::class, inversedBy="answers", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="answers", fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      */
     private $author;
@@ -73,24 +73,24 @@ class Answers
         return $this;
     }
 
-    public function getQuestion(): ?questions
+    public function getQuestion(): ?Question
     {
         return $this->question;
     }
 
-    public function setQuestion(?questions $question): self
+    public function setQuestion(?Question $question): self
     {
         $this->question = $question;
 
         return $this;
     }
 
-    public function getAuthor(): ?Users
+    public function getAuthor(): ?User
     {
         return $this->author;
     }
 
-    public function setAuthor(?Users $author): self
+    public function setAuthor(?User $author): self
     {
         $this->author = $author;
 

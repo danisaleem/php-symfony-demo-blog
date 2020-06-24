@@ -10,22 +10,22 @@ use Symfony\Component\Routing\Annotation\Route;
 class AnswerController extends AbstractController
 {
     /**
-     * @Route("/comments/{id}/vote/{direction<up|down>}", methods="POST")
+     * @Route("/comments/{id}/vote/{direction<up|down>}", name="app_answer_vote", methods="POST")
      */
     public function AnswerVote($id, $direction, LoggerInterface $logger)
     {
         $answer=$this->getDoctrine()
-            ->getRepository('App:Answers')
+            ->getRepository('App:Answer')
             ->findOneBy(['id' => $id]);
 
         $votes = $answer->getVotes();
 
         if ($direction === 'up') {
-            $logger->info('voting up from ' + $votes);
+            $logger->info('voting up from ' . strval($votes));
             $votes++; // up vote
             $currentVoteCount = $votes;
         } else {
-            $logger->info('voting down from '+ $votes);
+            $logger->info('voting down from ' . strval($votes));
             $votes--; // down vote
             $currentVoteCount = $votes;
         }

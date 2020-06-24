@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\QuestionsRepository;
+use App\Repository\QuestionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=QuestionsRepository::class)
+ * @ORM\Entity(repositoryClass=QuestionRepository::class)
  */
-class Questions
+class Question
 {
     /**
      * @ORM\Id()
@@ -35,12 +35,12 @@ class Questions
     private $questionTitle;
 
     /**
-     * @ORM\OneToMany(targetEntity=Answers::class, mappedBy="question", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Answer::class, mappedBy="question", orphanRemoval=true)
      */
     private $answers;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Users::class, inversedBy="questions", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="questions", fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      */
     private $author;
@@ -84,16 +84,6 @@ class Questions
         return $this;
     }
 
-    public function toArray()
-    {
-        return [
-            'id' => $this->getId(),
-            'QuestionText' => $this->getQuestionText(),
-//            'CreatedBy' => $this->getCreatedBy(),
-            'CreatedOn' => $this->getCreatedOn()
-        ];
-    }
-
     public function getQuestionTitle(): ?string
     {
         return $this->questionTitle;
@@ -107,14 +97,14 @@ class Questions
     }
 
     /**
-     * @return Collection|Answers[]
+     * @return Collection|Answer[]
      */
     public function getAnswers(): Collection
     {
         return $this->answers;
     }
 
-    public function addAnswer(Answers $answer): self
+    public function addAnswer(Answer $answer): self
     {
         if (!$this->answers->contains($answer)) {
             $this->answers[] = $answer;
@@ -124,7 +114,7 @@ class Questions
         return $this;
     }
 
-    public function removeAnswer(Answers $answer): self
+    public function removeAnswer(Answer $answer): self
     {
         if ($this->answers->contains($answer)) {
             $this->answers->removeElement($answer);
@@ -137,12 +127,12 @@ class Questions
         return $this;
     }
 
-    public function getAuthor(): ?Users
+    public function getAuthor(): ?User
     {
         return $this->author;
     }
 
-    public function setAuthor(?Users $author): self
+    public function setAuthor(?User $author): self
     {
         $this->author = $author;
 

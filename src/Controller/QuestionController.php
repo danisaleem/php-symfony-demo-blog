@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Answers;
-use App\Entity\Questions;
+use App\Entity\Answer;
+use App\Entity\Question;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,23 +19,17 @@ class QuestionController extends AbstractController
      */
     public function homepage(Request $request)
     {
-        $this->get('session')->set("userId",1); # user management
-
         if ($request->isMethod('post'))
         {
-            // getting current user id from session
-            $userId=$this->get('session')->get('userId', []);
+            $current_user = $this->getUser();
 
-            $current_user=$this->getDoctrine()
-            ->getRepository('App:Users')
-            ->findOneBy(['id' => $userId]);
-
-            $question=new Questions();
+            $question=new Question();
             $question->setAuthor($current_user);
             $question->setCreatedOn(\DateTime::createFromFormat('Y-m-d H:i:s', date("Y-m-d H:i:s")));
 
             $question->setQuestionText($request->get('txtQuestion'));
             $question->setQuestionTitle($request->get('txtQuestionTitle'));
+            $question->setVotes(0); // initialize votes to 0
 
             $em=$this->getDoctrine()->getManager();
             $em->persist($question);
@@ -45,7 +39,7 @@ class QuestionController extends AbstractController
         }
 
         $questions=$this->getDoctrine()
-            ->getRepository('App:Questions')
+            ->getRepository('App:Question')
             ->findAll();
 
         return $this->render('question/homepage.html.twig',['questions'=>$questions]);
@@ -57,23 +51,19 @@ class QuestionController extends AbstractController
     public function show(Request $request, $slug)
     {
         $question=$this->getDoctrine()
-            ->getRepository('App:Questions')
+            ->getRepository('App:Question')
             ->find($slug);
 
         if ($request->isMethod('post'))
         {
-            // getting current user id from session for author
-            $userId=$this->get('session')->get('userId', []);
+            $current_user = $this->getUser();
 
-            $current_user=$this->getDoctrine()
-                ->getRepository('App:Users')
-                ->findOneBy(['id' => $userId]);
-
-            $answer=new Answers();
+            $answer=new Answer();
             $answer->setAuthor($current_user);
             $answer->setAnsweredOn(\DateTime::createFromFormat('Y-m-d H:i:s', date("Y-m-d H:i:s")));
             $answer->setAnswerText($request->get('txtAnswer'));
             $answer->setQuestion($question);
+            $answer->setVotes(0); // initialize votes to 0
 
             $em=$this->getDoctrine()->getManager();
             $em->persist($answer);
@@ -84,7 +74,7 @@ class QuestionController extends AbstractController
         }
         
         $answers=$this->getDoctrine()
-            ->getRepository('App:Answers')
+            ->getRepository('App:Answer')
             ->findBy(['question' => $slug]);
 
         return $this->render('question/show.html.twig', [
