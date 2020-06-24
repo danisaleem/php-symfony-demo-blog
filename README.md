@@ -7,4 +7,9 @@
 - open cmd, goto project directory <br/>
 $ php bin/console make:migration   <br/>        
 $ php bin/console doctrine:migrations:migrate <br/>
-$ symfony serve
+$php bin/console doctrine:fixtures:load <br/>
+$ symfony serve <br/> <br/>
+
+Login details: <br/>
+email: abc@gmail.com <br/>
+password : abc
