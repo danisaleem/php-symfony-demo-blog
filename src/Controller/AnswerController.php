@@ -13,6 +13,7 @@ class AnswerController extends AbstractController
     /**
      * @Route("/answer/{id}/vote/{direction<up|down>}", name="app_answer_vote", methods="POST")
      * @param $id
+     * @param $direction
      * @return JsonResponse
      */
     public function AnswerVote($id, $direction, LoggerInterface $logger)
@@ -44,13 +45,19 @@ class AnswerController extends AbstractController
     /**
      * @Route("/answer/delete/{id}", methods={"DELETE"}, name="delete_answer")
      * @param $id
+     * @return JsonResponse
      */
-    public function delete($id){
-        if ($this->isGranted('ROLE_USER')) {
-            $answer=$this->getDoctrine()
-                ->getRepository('App:Answer')
-                ->find($id);
+    public function delete($id)
+    {
+        $answer=$this->getDoctrine()
+            ->getRepository('App:Answer')
+            ->find($id);
 
+        // check if author of answer is current user ot not a
+        $check =$answer->getAuthor()->getId()==$this->getUser()->getId();
+
+        if (($this->isGranted('ROLE_USER')) && ($check))
+        {
             $em = $this->getDoctrine()->getManager();
             $em->remove($answer);
             $em->flush();

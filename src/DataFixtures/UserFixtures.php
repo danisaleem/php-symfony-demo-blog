@@ -18,8 +18,6 @@ class UserFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        // $product = new Product();
-        // $manager->persist($product);
         $user = new User();
         $user->setEmail('abc@gmail.com');
         $user->setUsername('demo carribian');
@@ -31,6 +29,19 @@ class UserFixtures extends Fixture
                          'abc' // new password
                      ));
         $manager->persist($user);
+        $manager->flush();
+
+        $user2 = new User();
+        $user2->setEmail('cat@gmail.com');
+        $user2->setUsername('Mao Alter');
+        $user2->setRoles(['ROLE_USER']);
+        $user2->getAboutMe(['demo user 2']);
+
+        $user2->setPassword($this->passwordEncoder->encodePassword(
+            $user2,
+            'abc' // new password
+        ));
+        $manager->persist($user2);
         $manager->flush();
     }
 }
